@@ -1,10 +1,11 @@
 <!--Private page-->
 
 <h1>Hello {{user.username}}!</h1>
+<p>You're logged in !</p>
 
 {{#if user}}
   <div>
-    <a href="/">Index</a>
+    <a href="/">Index</a> <br><br>
   </div>
 <a href="/logout">Logout</a>
 {{/if}}
