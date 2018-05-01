@@ -57,7 +57,7 @@ authRoutes.get("/login", (req, res, next) => {
   });
   
   authRoutes.post("/login", passport.authenticate("local", { //== looks at new passport local strategy in app.js
-    successRedirect: "/private-page",// redirect to secrect page after login
+    successRedirect: "/",// redirect to secrect page after login
     failureRedirect: "/login",
     failureFlash: true, //== flash message
     passReqToCallback: true //== have access to req in callback
@@ -69,9 +69,30 @@ authRoutes.get("/login", (req, res, next) => {
     res.redirect("/login");
   });
   
-  //== private page
-  authRoutes.get("/private-page", ensureLogin.ensureLoggedIn(), (req, res) => { //if not logged in, redirect to login
-    res.render("auth/private", { user: req.user });
+
+//== passport authentication function
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    res.redirect('/login')
+  }
+}
+
+//== check roles
+function checkRoles(role) {
+  return function(req, res, next) {
+    if (req.isAuthenticated() && req.user.role === role) {
+      return next();
+    } else {
+      res.redirect('/')
+    }
+  }
+}
+
+  //== private page (only ADMINS)
+  authRoutes.get('/private', checkRoles('ADMIN'), (req, res) => {
+    res.render('auth/private', {user: req.user});
   });
 
 

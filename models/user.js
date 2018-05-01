@@ -5,7 +5,12 @@ const Schema   = mongoose.Schema;
 const userSchema = new Schema({
   username: String,
   password: String,
-  googleID: String //== google login
+  role: {
+    type: String,
+    enum : ['GUEST', 'EDITOR', 'ADMIN'],
+    default : 'GUEST'
+  }
+  //googleID: String //== google login
 }, {
   timestamps: { createdAt: "created_at", updatedAt: "updated_at" }
 });

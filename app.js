@@ -8,8 +8,9 @@ const hbs           = require('hbs');
 const mongoose      = require('mongoose');
 const logger        = require('morgan');
 const path          = require('path');
-//== connects the model
+//== connects the model(s)
 const User          = require('./models/user');
+const Room          = require('./models/room');
 //== passport requirements
 const session       = require("express-session");
 const bcrypt        = require("bcrypt");
@@ -47,7 +48,7 @@ app.use(require('node-sass-middleware')({
   sourceMap: true
 }));
 
-//== session for login
+//== required session for login
 app.use(session({
   secret: "our-passport-local-strategy-app",
   resave: true,
@@ -109,5 +110,8 @@ app.use('/', index);
 //==requireing auth routes
 const authRoutes = require("./routes/authRoutes");
 app.use('/', authRoutes);
+
+const roomRoutes = require('./routes/roomsRoutes');
+app.use('/', roomRoutes)
 
 module.exports = app;
